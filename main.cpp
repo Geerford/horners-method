@@ -4,6 +4,7 @@ using namespace std;
 void init(int &n, int &binomial, vector<int> &coefficients, vector<int> &result);
 void perform(int n, int binomial, const vector<int> &coefficients, vector<int> &result);
 void print(int n, int binomial, const vector<int> &coefficients, const vector<int> &result);
+void printPolynomial(const vector<int> &coefficients, int pow, int i);
 
 int main() {
     int n, binomial;
@@ -42,7 +43,40 @@ void print(int n, int binomial, const vector<int> &coefficients, const vector<in
     int pow = n, i = 0;
     cout << "(";
     while(i <= n){
-        switch(coefficients[i]){
+        printPolynomial(coefficients, pow, i);
+        if(coefficients[i] != 0 && pow > 1 && coefficients[i+1] > 0){
+            cout << "+";
+        }
+        ++i;
+        --pow;
+    }
+    if(binomial > 0){
+        printf(")/(x+%d) = (", binomial);
+    }
+    else{
+        printf(")/(x%d) = (", binomial);
+    }
+
+    pow = n-1;
+    i = 0;
+    while(i < n){
+        printPolynomial(result, pow, i);
+        if(result[i] != 0 && pow > 0 && result[i+1] > 0){
+            cout << "+";
+        }
+        ++i;
+        --pow;
+    }
+    if(result[n] >= 0){
+        cout << ")+" << result[n];
+    }
+    else{
+        cout << ")" << result[n];
+    }
+}
+
+void printPolynomial(const vector<int> &coefficients, int pow, int i) {
+    switch(coefficients[i]){
             case 0:
                 break;
             case 1:
@@ -72,62 +106,4 @@ void print(int n, int binomial, const vector<int> &coefficients, const vector<in
                 }
                 break;
         }
-        if(coefficients[i] != 0 && pow > 1 && coefficients[i+1] > 0){
-            cout << "+";
-        }
-        ++i;
-        --pow;
-    }
-    if(binomial > 0){
-        printf(")/(x+%d) = (", binomial);
-    }
-    else{
-        printf(")/(x%d) = (", binomial);
-    }
-
-    pow = n-1;
-    i = 0;
-    while(i < n){
-        switch(result[i]){
-            case 0:
-                break;
-            case 1:
-                switch(pow){
-                    case 0:
-                        cout << "1";
-                        break;
-                    case 1:
-                        cout << "x";
-                        break;
-                    default:
-                        printf("x^%d", pow);
-                        break;
-                }
-                break;
-            default:
-                switch(pow){
-                    case 0:
-                        printf("%d", result[i]);
-                        break;
-                    case 1:
-                        printf("%dx", result[i]);
-                        break;
-                    default:
-                        printf("%dx^%d", result[i], pow);
-                        break;
-                }
-                break;
-        }
-        if(result[i] != 0 && pow > 0 && result[i+1] > 0){
-            cout << "+";
-        }
-        ++i;
-        --pow;
-    }
-    if(result[n] >= 0){
-        cout << ")+" << result[n];
-    }
-    else{
-        cout << ")" << result[n];
-    }
 }
